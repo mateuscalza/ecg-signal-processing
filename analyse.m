@@ -21,36 +21,31 @@ title('ECG com filtro');
 grid on;
 
 % FFT
-L = length(val);
 Y = fft(val(2,:));
-P2 = abs(Y/L);
-P1 = P2(1:L/2+1);
-f = Fs*(0:(L/2))/L;
-
-% FTT plot original
-figure(3);
-plot(f,P1);
 
 % Limpando frequências
+L = length(val(2,:));
+f = Fs*(0:(L/2))/L;
 for index=1:length(f)
    frequency = f(index);
    disp(frequency);
-   if frequency < 0.67 || frequency >= 50
+   if frequency < 0.67 || frequency >= 45
        Y(index) = 0;
    end
 end
-
-% FTT plot filtrado
-P2 = abs(Y/L);
-P1 = P2(1:L/2+1);
-f = Fs*(0:(L/2))/L;
-hold on;
-plot(f,P1);
-legend('Original', 'Após filtro');
 
 % IFTT
 result = ifft(Y);
 figure(4);
 plot(t,result/1000);
+
+% FTT plot original
+figure(3);
+fftPlot(val(2,:), Fs);
+
+% FTT plot filtrado
+hold on;
+fftPlot(result, Fs);
+legend('Original', 'Após filtro');
 
 
